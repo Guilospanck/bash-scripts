@@ -54,19 +54,16 @@ install_kind(){
 install_jenkins(){
   echo "----- Installing Jenkins..."
   sudo apt update
-  sudo apt install default-jre
-  sudo apt install default-jdk
+  sudo apt install default-jre -y
+  sudo apt install default-jdk -y
 
   wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
   sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
   sudo apt update
 
-  sudo apt install jenkins
+  echo "jenkins ALL= NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 
-  sudo su
-  echo "jenkins ALL= NOPASSWD: ALL" >> /etc/sudoers 
-  exit
-
+  sudo apt install jenkins -y
   sudo systemctl start jenkins
 }
 
