@@ -10,6 +10,7 @@ usage(){
   echo "      -d (--docker): installs Docker"
   echo "      -kl (--kubectl): installs kubectl"
   echo "      -kd (--kind): installs kind"
+  echo "      -jk (--jenkins): installs jenkins"
   echo "      -h (--help): this page"
   echo
   echo "Created by @Guilospanck"
@@ -50,6 +51,25 @@ install_kind(){
   echo "----- kind installed!"
 }
 
+install_jenkins(){
+  echo "----- Installing Jenkins..."
+  sudo apt update
+  sudo apt install default-jre
+  sudo apt install default-jdk
+
+  wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+  sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+  sudo apt update
+
+  sudo apt install jenkins
+
+  sudo su
+  echo "jenkins ALL= NOPASSWD: ALL" >> /etc/sudoers 
+  exit
+
+  sudo systemctl start jenkins
+}
+
 for i in "$@"; do
   case $i in
     -d|--docker)
@@ -62,6 +82,10 @@ for i in "$@"; do
       ;;
     -kd|--kind)
       install_kind
+      shift # past argument=value
+      ;;
+    -jk|--jenkins)
+      install_jenkins
       shift # past argument=value
       ;;
     -h|--help)
