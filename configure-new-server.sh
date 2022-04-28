@@ -2,13 +2,15 @@
 
 usage(){
     echo "This script will install some necessary programs for your server."
-    echo "Usage:"
     echo
+    echo "Usage:"
     echo "      ./configure-new-server.sh -d -kl -kd"
+    echo
     echo "Where:"
     echo "      -d (--docker): installs Docker"
     echo "      -kl (--kubectl): installs kubectl"
     echo "      -kd (--kind): installs kind"
+    echo "      -h (--help): this page"
     echo
     echo "Created by @Guilospanck"
 }
@@ -60,6 +62,10 @@ for i in "$@"; do
       ;;
     -kd|--kind)
       install_kind
+      shift # past argument=value
+      ;;
+    -h|--help)
+      usage
       shift # past argument=value
       ;;
     -*|--*)
