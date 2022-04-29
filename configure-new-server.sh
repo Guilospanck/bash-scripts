@@ -12,6 +12,7 @@ usage(){
   echo "      -kd (--kind): installs kind"
   echo "      -jk (--jenkins): installs jenkins"
   echo "      -f2b (--fail2ban): installs fail2ban"
+  echo "      -nx (--nginx): installs nginx"
   echo "      -h (--help): this page"
   echo
   echo "Created by @Guilospanck"
@@ -77,12 +78,23 @@ install_fail2ban(){
   echo "----- fail2ban installed!"
 }
 
+install_nginx(){
+  echo "----- Installing Nginx..."
+  sudo apt update
+  sudo apt install nginx -y
+  sudo cp nginx.conf /etc/nginx/nginx.conf
+  sudo nginx -t
+  sudo systemctl restart nginx
+  echo "----- Nginx installed!"
+}
+
 install_all(){
   install_docker
   install_kubectl
   install_kind
   install_jenkins
   install_fail2ban
+  install_nginx
 }
 
 for i in "$@"; do
@@ -105,6 +117,10 @@ for i in "$@"; do
       ;;
     -f2b|--fail2ban)
       install_fail2ban
+      shift # past argument=value
+      ;;
+    -nx|--nginx)
+      install_nginx
       shift # past argument=value
       ;;
     -all|--all)
