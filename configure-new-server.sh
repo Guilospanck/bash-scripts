@@ -11,6 +11,7 @@ usage(){
   echo "      -kl (--kubectl): installs kubectl"
   echo "      -kd (--kind): installs kind"
   echo "      -jk (--jenkins): installs jenkins"
+  echo "      -f2b (--fail2ban): installs fail2ban"
   echo "      -h (--help): this page"
   echo
   echo "Created by @Guilospanck"
@@ -67,6 +68,23 @@ install_jenkins(){
   sudo systemctl start jenkins
 }
 
+
+install_fail2ban(){
+  echo "----- Installing fail2ban..."
+  sudo apt update
+  sudo apt install fail2ban -y
+  sudo service fail2ban start
+  echo "----- fail2ban installed!"
+}
+
+install_all(){
+  install_docker
+  install_kubectl
+  install_kind
+  install_jenkins
+  install_fail2ban
+}
+
 for i in "$@"; do
   case $i in
     -d|--docker)
@@ -83,6 +101,14 @@ for i in "$@"; do
       ;;
     -jk|--jenkins)
       install_jenkins
+      shift # past argument=value
+      ;;
+    -f2b|--fail2ban)
+      install_fail2ban
+      shift # past argument=value
+      ;;
+    -all|--all)
+      install_all
       shift # past argument=value
       ;;
     -h|--help)
