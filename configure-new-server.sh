@@ -13,6 +13,7 @@ usage(){
   echo "      -jk (--jenkins): installs jenkins"
   echo "      -f2b (--fail2ban): installs fail2ban"
   echo "      -nx (--nginx): installs nginx"
+  echo "      -helm (--helm): installs helm"
   echo "      -h (--help): this page"
   echo
   echo "Created by @Guilospanck"
@@ -88,6 +89,12 @@ install_nginx(){
   echo "----- Nginx installed!"
 }
 
+install_helm(){
+  echo "----- Installing Helm..."
+  sudo snap install helm --classic
+  echo "----- Helm installed!"
+}
+
 install_all(){
   install_docker
   install_kubectl
@@ -95,6 +102,7 @@ install_all(){
   install_jenkins
   install_fail2ban
   install_nginx
+  install_helm
 }
 
 for i in "$@"; do
@@ -121,6 +129,10 @@ for i in "$@"; do
       ;;
     -nx|--nginx)
       install_nginx
+      shift # past argument=value
+      ;;
+    -helm|--helm)
+      install_helm
       shift # past argument=value
       ;;
     -all|--all)
