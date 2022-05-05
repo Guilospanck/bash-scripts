@@ -14,6 +14,7 @@ usage(){
   echo "      -f2b (--fail2ban): installs fail2ban"
   echo "      -nx (--nginx): installs nginx"
   echo "      -helm (--helm): installs helm"
+  echo "      -java (--java): installs java"
   echo "      -h (--help): this page"
   echo
   echo "Created by @Guilospanck"
@@ -57,8 +58,7 @@ install_kind(){
 install_jenkins(){
   echo "----- Installing Jenkins..."
   sudo apt update
-  sudo apt install default-jre -y
-  sudo apt install default-jdk -y
+  install_java
 
   wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
   sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
@@ -69,7 +69,6 @@ install_jenkins(){
   sudo apt install jenkins -y
   sudo systemctl start jenkins
 }
-
 
 install_fail2ban(){
   echo "----- Installing fail2ban..."
@@ -93,6 +92,13 @@ install_helm(){
   echo "----- Installing Helm..."
   sudo snap install helm --classic
   echo "----- Helm installed!"
+}
+
+install_java(){
+  echo "----- Installing Java..."
+  sudo apt install default-jre -y
+  sudo apt install default-jdk -y
+  echo "----- Java installed!"
 }
 
 install_all(){
@@ -133,6 +139,10 @@ for i in "$@"; do
       ;;
     -helm|--helm)
       install_helm
+      shift # past argument=value
+      ;;
+    -java|--java)
+      install_java
       shift # past argument=value
       ;;
     -all|--all)
